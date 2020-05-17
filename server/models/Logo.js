@@ -13,6 +13,9 @@ var LogoSchema = new mongoose.Schema({
   padding: {type: Number, min: 2, max: 144},
   margin: {type: Number, min: 2, max: 144},
 
+  x: {type: Number, min: 0, max: 500},
+  y: {type: Number, min: 0, max: 500},
+
   lastUpdate: { type: Date, default: Date.now },
 });
 

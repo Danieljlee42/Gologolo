@@ -17,6 +17,8 @@ const GET_LOGO = gql`
             borderWidth
             padding
             margin
+            x
+            y
             lastUpdate
         }
     }
@@ -52,39 +54,61 @@ class ViewLogoScreen extends Component {
 
                                 <div className = "col">
                                     <div className="row" >
-                                        <div className = "col-2" style={{backgroundColor: "#cdf5c7"}}> 
+                                        <div className = "col-4" style={{backgroundColor: "#cdf5c7"}}> 
                                             <div style={{padding: 10}}>
-                                                <h3 className="panel-title" >View Logo</h3>
+                                                <h3 className="panel-title" style = {{textAlign: 'center'}}>View Logo</h3>
                                             </div>
-                                            <dl>
-                                                <dt>Text:</dt>
-                                                <dd style = {{whiteSpace: 'pre', overflow: 'auto'}}>{data.logo.text}</dd>
-                                                <dt>Color:</dt>
-                                                <dd>{data.logo.color}</dd>
-                                                <dt>Font Size:</dt>
-                                                <dd>{data.logo.fontSize}</dd>
-                                                
-                                                <dt>Background Color:</dt>
-                                                <dd>{data.logo.backgroundColor}</dd>
+                                            
+                                            <div className = "row">
+                                                <div className = "col">
+                                                    <dt>Text:</dt>
+                                                    <dd style = {{whiteSpace: 'pre', overflow: 'auto'}}>{data.logo.text}</dd>
 
-                                                <dt>Border Color:</dt>
-                                                <dd>{data.logo.borderColor}</dd> 
+                                                    <dt>Color:</dt>
+                                                    <dd>{data.logo.color}</dd>
 
-                                                <dt>Border Radius:</dt>
-                                                <dd>{data.logo.borderRadius}</dd> 
+                                                    <dt>Font Size:</dt>
+                                                    <dd>{data.logo.fontSize}</dd>
+                                                    
+                                                    <dt>Background Color:</dt>
+                                                    <dd>{data.logo.backgroundColor}</dd>
 
-                                                <dt>Border Width:</dt>
-                                                <dd>{data.logo.borderWidth}</dd> 
+                                                    <dt>Border Color:</dt>
+                                                    <dd>{data.logo.borderColor}</dd> 
+                                                </div>
 
-                                                <dt>Padding:</dt>
-                                                <dd>{data.logo.padding}</dd> 
+                                                <div className = "col">
+                                                    <dt>Border Radius:</dt>
+                                                    <dd>{data.logo.borderRadius}</dd> 
 
-                                                <dt>Margin:</dt>
-                                                <dd>{data.logo.margin}</dd> 
+                                                    <dt>Border Width:</dt>
+                                                    <dd>{data.logo.borderWidth}</dd> 
 
-                                                <dt>Last Updated:</dt>
+                                                    <dt>x-axis:</dt>
+                                                    <dd>{data.logo.x}</dd> 
+
+                                                    <dt>y-axis:</dt>
+                                                    <dd>{data.logo.y}</dd> 
+                                                </div>
+                                            </div>
+
+                                            <div style={{border: "3px solid red"}}></div>
+
+                                            <div className = "row">
+                                                <div className = "col">
+                                                    <dt>Padding:</dt>
+                                                    <dd>{data.logo.padding}</dd> 
+                                                </div>
+                                                <div className = "col">
+                                                    <dt>Margin:</dt>
+                                                    <dd>{data.logo.margin}</dd> 
+                                                </div>
+                                            </div>
+
+                                            <dt>Last Updated:</dt>
                                                 <dd style = {{overflow: 'auto'}} >{data.logo.lastUpdate}</dd>
-                                            </dl>
+                                                
+                                            
                                             <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
                                                 {(removeLogo, { loading, error }) => (
                                                     <div>
@@ -103,11 +127,13 @@ class ViewLogoScreen extends Component {
                                             </Mutation>
                                         
                                         </div>
-                                        <div style = {{overflow: 'auto'}}>
+
+                                        <div style = {{border: "3px solid red"}}>
                                             <div
                                                 style = {{
                                                     whiteSpace: 'pre',
                                                     border:"solid",
+                                                    position: "relative",
                                                     color:data.logo.color,
                                                     fontSize:data.logo.fontSize,
                                                     backgroundColor:data.logo.backgroundColor,
@@ -116,11 +142,14 @@ class ViewLogoScreen extends Component {
                                                     borderWidth:data.logo.borderWidth,
                                                     padding:data.logo.padding,
                                                     margin:data.logo.margin,
+                                                    top: data.logo.y,
+                                                    left: data.logo.x,
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
                                                 {data.logo.text}
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     
                                     </div>
