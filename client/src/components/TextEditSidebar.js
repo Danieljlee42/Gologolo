@@ -74,10 +74,6 @@ class EditLogoScreen extends Component {
             margin: null,
             x: null,
             y: null,
-            width: 50,
-            height: 50,
-            imgWidth: null,
-            imgHeight: null
         }
     }
 
@@ -145,14 +141,6 @@ class EditLogoScreen extends Component {
         this.setState({y: y}, this.completeUserEditing);
     }
 
-    handleSizeChange = (e, position) => {
-        const {x, y} = position;
-        console.log("handlePositionChangeComplete to x= " + x + " y= " + y);
-        this.setState({width: x});
-        this.setState({height: y}, this.completeUserEditing);
-    }
-
-
     componentDidMount(){
         console.log("handlePaddingChangeComplete to ");
         return( 
@@ -219,6 +207,7 @@ class EditLogoScreen extends Component {
                                                     <div style={{padding: 10}}>
                                                         <h3 className="panel-title" style = {{textAlign: 'center'}}>Edit Logo</h3>
                                                     </div>
+                                                    
                                                     <form onSubmit={e => {
                                                         e.preventDefault();
                                                         updateLogo({ variables: { 
@@ -377,7 +366,7 @@ class EditLogoScreen extends Component {
                                                                     <label htmlFor="padding">Padding:</label>
                                                                     <input 
                                                                         type="number" 
-                                                                        min = "0"
+                                                                        min = "2"
                                                                         max = "144"
                                                                         className="form-control" 
                                                                         name="padding" 
@@ -394,7 +383,7 @@ class EditLogoScreen extends Component {
                                                                     <label htmlFor="margin">Margin:</label>
                                                                     <input 
                                                                         type="number" 
-                                                                        min = "0"
+                                                                        min = "2"
                                                                         max = "144"
                                                                         className="form-control" 
                                                                         name="margin" 
@@ -406,6 +395,7 @@ class EditLogoScreen extends Component {
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
 
 
@@ -415,98 +405,44 @@ class EditLogoScreen extends Component {
                                                     {error && <p>Error :( Please try again</p>}
                                                     {errorMsg}
                                                 </div>
-                                                
-                                                
 
-                                                <div>
-                                                <div style={{ position: "absolute", border: "3px solid red"}}>
-                                                    <div style={{
-                                                        position: "relative",
-                                                        border: "solid",
-                                                        backgroundColor: this.state.backgroundColor,
-                                                        borderColor: this.state.borderColor,
-                                                        borderRadius: this.state.borderRadius + "px",
-                                                        borderWidth: this.state.borderWidth + "px",
-                                                        padding: this.state.padding + "px",
-                                                        margin: this.state.margin + "px",
-                                                        width: this.state.width + "px",
-                                                        height: this.state.height + "px",
-                                                        //maxWidth: "100px",
-                                                        //maxHeight: "100px"
-                                                        }}>
-                                                            <Draggable
-                                                                handle=".handle"
-                                                                bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                                position={{x:(this.state.width)-(this.state.borderWidth), y: (this.state.height)-(this.state.borderWidth)}}
-                                                                grid={[1, 1]}
-                                                                scale={1}
-                                                                onStart={this.handleStart}
-                                                                onDrag={this.handleDrag, this.handleSizeChange}
-                                                                onStop={this.handleStop}>
-                                                                <div>
-                                                                    <div className="handle">
-                                                                        <div 
-                                                                            style = {{
-                                                                                whiteSpace: 'pre',
-                                                                                border: '1px solid blue',
-                                                                                fontSize: "15px",
-                                                                                width: "15px",
-                                                                            }}>
-                                                                            Drag Me to resize 
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </Draggable>
-                                                    </div>
-                                                    
-                                                    
-                                                </div>
-                                                </div>
+                                                <Draggable
+                                                    handle=".handle"
+                                                    //defaultPosition=
+                                                    bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
+                                                    position={{x: this.state.x, y: this.state.y}}
+                                                    grid={[1, 1]}
+                                                    scale={1}
+                                                    onStart={this.handleStart}
+                                                    onDrag={this.handleDrag, this.handlePositionChange}
+                                                    onStop={this.handleStop}>
 
-                                                <div>
-                                                    <Draggable
-                                                        handle=".handle"
-                                                        //defaultPosition=
-                                                        bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                        position={{x: this.state.x, y: this.state.y}}
-                                                        grid={[1, 1]}
-                                                        scale={1}
-                                                        onStart={this.handleStart}
-                                                        onDrag={this.handleDrag, this.handlePositionChange}
-                                                        onStop={this.handleStop}>
-
-                                                        <div className="handle">
+                                                    <div>
+                                                        <div className="handle" style = {{overflow: 'auto'}}>
                                                             <div 
                                                                 style = {{
                                                                     whiteSpace: 'pre',
-                                                                    position: 'absolute',
                                                                     border: '0px solid',
                                                                     color: this.state.textColor,
                                                                     fontSize: this.state.fontSize + "px",
+                                                                    backgroundColor: this.state.backgroundColor,
+                                                                    borderColor: this.state.borderColor,
+                                                                    borderRadius: this.state.borderRadius + "px",
+                                                                    borderWidth: this.state.borderWidth + "px",
+                                                                    padding: this.state.padding + "px",
+                                                                    margin: this.state.margin + "px"
                                                                 }}>
                                                                 {this.state.text}
                                                             </div>
                                                         </div>
-                                                    </Draggable>
-                                                    <Draggable
-                                                        handle=".handle"
-                                                        defaultPosition={{x:0,y:0}}
-                                                        bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                        //position={{x: this.state.x, y: this.state.y}}
-                                                        grid={[1, 1]}
-                                                        scale={1}
-                                                        onStart={this.handleStart}
-                                                        onDrag={this.handleDrag}//, this.handlePositionChange}
-                                                        onStop={this.handleStop}>
+                                                    </div>
+                                                </Draggable>
 
-                                                        <div className="handle">
-                                                            <img src="https://www.w3schools.com/tags/smiley.gif" alt="Smiley face" width="45" height="40"></img>
-                                                        </div>
-                                                    </Draggable>
-                                                </div>                            
 
                                             </div>
+
                                         </div>
+                                    
                                     </div>
                                 </div>
                             )}
