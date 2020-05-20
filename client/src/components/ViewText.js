@@ -26,16 +26,6 @@ class ViewText extends Component {
     }
 
     render() {
-        // const styles = {
-        //     container: {
-        //         whiteSpace: 'pre',
-        //         //border: "0px solid",
-        //         color: this.props.textColor,
-        //         fontSize: this.props.fontSize + "pt",
-        //         x: this.props.x + "pt",
-        //         y: this.props.y + "pt"
-        //     }
-        // }
         return (
             console.log(this.props.textId),
             <Query pollInterval={500} query={GET_TEXT} variables={{ textId: this.props.textId }}>

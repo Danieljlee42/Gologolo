@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
 import ViewText from './ViewText.js'
+import ViewImg from './ViewImg.js'
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -21,11 +22,10 @@ const GET_LOGO = gql`
             height
             texts{
                 _id
-                text
-                color
-                fontSize
-                x
-                y
+                order
+            }
+            imgs{
+                _id
                 order
             }
             lastUpdate
@@ -66,7 +66,7 @@ class ViewLogoScreen extends Component {
                                     <div className="row" >
                                         <div className = "col-4" style={{backgroundColor: "#cdf5c7"}}> 
                                             <div style={{padding: 10}}>
-                                                <h3 className="panel-title" style = {{fontSize: '1.5vw', textAlign: 'center', whiteSpace: 'pre'}}>
+                                                <h3 className="panel-title" style = {{fontSize: '1.5vw', textAlign: 'center', whiteSpace: 'pre', overflow: 'auto'}}>
                                                     View Logo: {data.logo.logoName}</h3>
                                             </div>
                                             
@@ -158,24 +158,22 @@ class ViewLogoScreen extends Component {
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
                                             </div>
-                                            <div >
-                                                {/* {data.logo.texts.sort((a, b) => b.order > a.order).map( 
-                                                    (textObj, order) =>
-                                                    (
-                                                    <div key={order} className='printTexts' style={{ cursor: "pointer", whiteSpace: "pre"}}>
-                                                        <ViewText text={textObj}></ViewText>
-                                                    </div>
-                                                    )
-                                                )} */}
-
+                                                {/* If the text was to be in the bounds of the logo area add
+                                                the bottom to the div on the top which is logo div. */}
+                                            <div>
                                                 {[...data.logo.texts]
                                                 .map((text, i) => (
                                                 <div key = {i}>
                                                     <ViewText textId={text._id}></ViewText>
                                                 </div>))}
-                                        
                                             </div>
-
+                                            <div>
+                                                {[...data.logo.imgs]
+                                                .map((img, i) => (
+                                                <div key = {i}>
+                                                    <ViewImg imgId={img._id}></ViewImg>
+                                                </div>))}
+                                            </div>
 
                                         </div>
 
