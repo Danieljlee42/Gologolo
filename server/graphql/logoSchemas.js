@@ -148,7 +148,7 @@ var queryType = new GraphQLObjectType({
             },
             text: {
                 type: textType,
-                args: { id: {type: GraphQLString }},
+                args: { id: {name: '_id', type: GraphQLString }},
                 resolve: function (root, params) {
                     const textDetails = TextModel.findById(params.id).exec()
                     if (!textDetails) {throw new Error('Error')}

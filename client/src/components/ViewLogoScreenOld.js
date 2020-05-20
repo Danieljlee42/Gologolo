@@ -4,35 +4,25 @@ import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
-import ViewText from './ViewText.js'
-
 const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
-            logoName
+            text
+            color
+            fontSize
             backgroundColor
             borderColor
             borderRadius
             borderWidth
             padding
             margin
-            width
-            height
-            texts{
-                _id
-                text
-                color
-                fontSize
-                x
-                y
-                order
-            }
+            x
+            y
             lastUpdate
         }
     }
 `;
-
 
 const DELETE_LOGO = gql`
   mutation removeLogo($id: String!) {
@@ -66,34 +56,33 @@ class ViewLogoScreen extends Component {
                                     <div className="row" >
                                         <div className = "col-4" style={{backgroundColor: "#cdf5c7"}}> 
                                             <div style={{padding: 10}}>
-                                                <h3 className="panel-title" style = {{fontSize: '1.5vw', textAlign: 'center', whiteSpace: 'pre'}}>
-                                                    View Logo: {data.logo.logoName}</h3>
+                                                <h3 className="panel-title" style = {{textAlign: 'center'}}>View Logo</h3>
                                             </div>
                                             
                                             <div className = "row">
                                                 <div className = "col">
+                                                    <dt>Text:</dt>
+                                                    <dd style = {{whiteSpace: 'pre', overflow: 'auto'}}>{data.logo.text}</dd>
+
+                                                    <dt>Color:</dt>
+                                                    <dd>{data.logo.color}</dd>
+
+                                                    <dt>Font Size:</dt>
+                                                    <dd>{data.logo.fontSize}</dd>
                                                     
                                                     <dt>Background Color:</dt>
                                                     <dd>{data.logo.backgroundColor}</dd>
 
                                                     <dt>Border Color:</dt>
                                                     <dd>{data.logo.borderColor}</dd> 
+                                                </div>
 
+                                                <div className = "col">
                                                     <dt>Border Radius:</dt>
                                                     <dd>{data.logo.borderRadius}</dd> 
 
                                                     <dt>Border Width:</dt>
                                                     <dd>{data.logo.borderWidth}</dd> 
-
-                                                </div>
-
-                                                <div className = "col">
-                                                    
-                                                    <dt>width:</dt>
-                                                    <dd>{data.logo.width}</dd> 
-
-                                                    <dt>height:</dt>
-                                                    <dd>{data.logo.height}</dd> 
 
                                                     <dt>x-axis:</dt>
                                                     <dd>{data.logo.x}</dd> 
@@ -139,12 +128,14 @@ class ViewLogoScreen extends Component {
                                         
                                         </div>
 
-                                        <div style = {{border: "3px solid red", position:'relative'}}>
+                                        <div style = {{border: "3px solid red"}}>
                                             <div
                                                 style = {{
                                                     whiteSpace: 'pre',
                                                     border:"solid",
                                                     position: "relative",
+                                                    color:data.logo.color,
+                                                    fontSize:data.logo.fontSize,
                                                     backgroundColor:data.logo.backgroundColor,
                                                     borderColor:data.logo.borderColor,
                                                     borderRadius:data.logo.borderRadius,
@@ -153,32 +144,11 @@ class ViewLogoScreen extends Component {
                                                     margin:data.logo.margin,
                                                     top: data.logo.y,
                                                     left: data.logo.x,
-                                                    width: data.logo.width,
-                                                    height: data.logo.height,
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
+                                                {data.logo.text}
                                             </div>
-                                            <div >
-                                                {/* {data.logo.texts.sort((a, b) => b.order > a.order).map( 
-                                                    (textObj, order) =>
-                                                    (
-                                                    <div key={order} className='printTexts' style={{ cursor: "pointer", whiteSpace: "pre"}}>
-                                                        <ViewText text={textObj}></ViewText>
-                                                    </div>
-                                                    )
-                                                )} */}
-
-                                                {[...data.logo.texts]
-                                                .map((text, i) => (
-                                                <div key = {i}>
-                                                    <ViewText textId={text._id}></ViewText>
-                                                </div>))}
-                                        
-                                            </div>
-
-
                                         </div>
-
                                         
                                     </div>
                                     
