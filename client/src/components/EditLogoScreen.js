@@ -17,6 +17,8 @@ const GET_LOGO = gql`
             borderWidth
             padding
             margin
+            width
+            height
             x
             y
         }
@@ -35,6 +37,8 @@ const UPDATE_LOGO = gql`
         $borderWidth: Int!,
         $padding: Int!,
         $margin: Int!,
+        $width: Int!,
+        $height: Int!,
         $x: Int!,
         $y: Int!) {
             updateLogo(
@@ -48,6 +52,8 @@ const UPDATE_LOGO = gql`
                 borderWidth: $borderWidth,
                 padding: $padding,
                 margin: $margin,
+                width: $width,
+                height: $height,
                 x: $x,
                 y: $y
                 ) {
@@ -74,8 +80,8 @@ class EditLogoScreen extends Component {
             margin: null,
             x: null,
             y: null,
-            width: 50,
-            height: 50,
+            width: null,
+            height: null,
             imgWidth: null,
             imgHeight: null
         }
@@ -166,7 +172,7 @@ class EditLogoScreen extends Component {
     }
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, x, y
+        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, x, y, width, height
 
 
         return (
@@ -196,6 +202,8 @@ class EditLogoScreen extends Component {
                         this.setState({ margin: data.logo.margin });
                         this.setState({ x: data.logo.x });
                         this.setState({ y: data.logo.y });
+                        this.setState({ width: data.logo.width });
+                        this.setState({ height: data.logo.height });
                     } 
         
                     return (
@@ -233,10 +241,15 @@ class EditLogoScreen extends Component {
                                                             padding: parseInt(padding.value), 
                                                             margin: parseInt(margin.value),
                                                             x: parseInt(x.value),
-                                                            y: parseInt(this.state.y)
+                                                            y: parseInt(y.value),
+                                                            height: parseInt(y.value),
+                                                            width: parseInt(width.value),
+                                                            height: parseInt(height.value)
                                                         }});
                                                         x.value = "";
                                                         y.value = "";
+                                                        width.value = "";
+                                                        height.value = "";
                                                         text.value = "";
                                                         color.value = "";
                                                         fontSize.value = "";
@@ -366,8 +379,28 @@ class EditLogoScreen extends Component {
                                                                         defaultValue={this.state.y}
                                                                         />
                                                                 </div>
-
-
+                                                                <div className="form-group">
+                                                                    <label htmlFor="width">width:</label>
+                                                                    <input 
+                                                                        disabled= "true"
+                                                                        //type="number" 
+                                                                        className="form-control" 
+                                                                        name="width" 
+                                                                        ref={node => {width = node;}}
+                                                                        defaultValue={this.state.width}
+                                                                        />
+                                                                </div>
+                                                                <div className="form-group">
+                                                                    <label htmlFor="height">height:</label>
+                                                                    <input 
+                                                                        disabled= "true"
+                                                                        //type="number" 
+                                                                        className="form-control" 
+                                                                        name="height" 
+                                                                        ref={node => {height = node;}}
+                                                                        defaultValue={this.state.height}
+                                                                        />
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -437,7 +470,7 @@ class EditLogoScreen extends Component {
                                                             <Draggable
                                                                 handle=".handle"
                                                                 bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                                position={{x:(this.state.width)-(this.state.borderWidth), y: (this.state.height)-(this.state.borderWidth)}}
+                                                                position={{x: this.state.width, y: this.state.height}}
                                                                 grid={[1, 1]}
                                                                 scale={1}
                                                                 onStart={this.handleStart}
@@ -448,9 +481,10 @@ class EditLogoScreen extends Component {
                                                                         <div 
                                                                             style = {{
                                                                                 whiteSpace: 'pre',
+                                                                                position: 'absolute',
                                                                                 border: '1px solid blue',
-                                                                                fontSize: "15px",
-                                                                                width: "15px",
+                                                                                fontSize: "15px"
+
                                                                             }}>
                                                                             Drag Me to resize 
                                                                         </div>
