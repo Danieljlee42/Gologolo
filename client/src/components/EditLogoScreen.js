@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
-import Draggable, {DraggableCore} from 'react-draggable';
+import Draggable from 'react-draggable';
 
 
 import ViewText from './ViewText.js'
@@ -188,7 +188,7 @@ class EditLogoScreen extends Component {
                         this.setState({ width: data.logo.width });
                         this.setState({ height: data.logo.height });
                     }
-                    
+
                     return (
                         <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/modify/textImag/`+this.props.match.params.id)}>
                             {(updateLogo, { loading, error }) => (
@@ -437,49 +437,6 @@ class EditLogoScreen extends Component {
                                                     
                                                 </div>
                                                 </div>
-
-                                                <div>
-                                                    <Draggable
-                                                        handle=".handle"
-                                                        //defaultPosition=
-                                                        bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                        position={{x: this.state.x, y: this.state.y}}
-                                                        grid={[1, 1]}
-                                                        scale={1}
-                                                        onStart={this.handleStart}
-                                                        onDrag={this.handleDrag, this.handlePositionChange}
-                                                        onStop={this.handleStop}>
-
-                                                        <div className="handle">
-                                                            <div 
-                                                                style = {{
-                                                                    whiteSpace: 'pre',
-                                                                    position: 'absolute',
-                                                                    border: '0px solid',
-                                                                    color: this.state.textColor,
-                                                                    fontSize: this.state.fontSize + "px",
-                                                                }}>
-                                                                {this.state.text}
-                                                            </div>
-                                                        </div>
-                                                    </Draggable>
-                                                    <Draggable
-                                                        handle=".handle"
-                                                        defaultPosition={{x:0,y:0}}
-                                                        bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                        //position={{x: this.state.x, y: this.state.y}}
-                                                        grid={[1, 1]}
-                                                        scale={1}
-                                                        onStart={this.handleStart}
-                                                        onDrag={this.handleDrag}//, this.handlePositionChange}
-                                                        onStop={this.handleStop}>
-
-                                                        <div className="handle">
-                                                            <img src="https://www.w3schools.com/tags/smiley.gif" alt="Smiley face" width="45" height="40"></img>
-                                                        </div>
-                                                    </Draggable>
-                                                </div>                            
-
                                             </div>
                                         </div>
                                     </div>

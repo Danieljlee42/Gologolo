@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import html2canvas from 'html2canvas';
+import htmlToImage from 'html-to-image';
 
 import ViewText from './ViewText.js'
 import ViewImg from './ViewImg.js'
@@ -42,9 +44,74 @@ const DELETE_LOGO = gql`
   }
 `;
 
+
+
+
 class ViewLogoScreen extends Component {
 
+    
+    
+
     render() {
+
+        // function handleSaveImage(){
+        //     console.log("HEREY")
+        //     var node = document.getElementById('capture');
+        //     htmlToImage.toPng(node)
+        //     .then(function (dataUrl) {
+        //         var img = new Image();
+        //         img.src = dataUrl;
+        //         document.body.appendChild(img);
+        //     })
+        //     .catch(function (error) {
+        //         console.error('oops, something went wrong!', error);
+        //     })
+            
+        // }
+
+        // function handleSaveImage(){
+        //     htmlToImage.toJpeg(document.getElementById('capture'), { quality: 0.95 })
+        //     .then(function (dataUrl) {
+        //     var link = document.createElement('a');
+        //     link.download = 'Gologolo.jpeg';
+        //     link.href = dataUrl;
+        //     link.click();
+        //     });
+        // }
+        // function handleSaveImage(){
+        //     html2canvas(document.getElementById("capture")).then(canvas => {document.body.appendChild(canvas)
+        //     });
+        // }
+
+        
+        function handleSaveImage(){
+                html2canvas(document.getElementById("capture"), {
+                    //foreignObjectRendering: true, 
+                    imageTimeout: 15000, 
+                    //removeContainer: true,
+                    useCORS: true,
+                    width: 700
+                }).then(canvas => {
+                    saveAs(canvas.toDataURL(), 'file-name.png');
+                });
+            }
+        function saveAs(uri, filename) {
+            var link = document.createElement('a');
+            if (typeof link.download === 'string') {
+                link.href = uri;
+                link.download = filename;
+                //Firefox requires the link to be in the body
+                document.body.appendChild(link);
+                //simulate click
+                link.click();
+                //remove the link when done
+                //document.body.removeChild(link);
+            } else {
+                window.open(uri);
+            }
+        }
+
+
         return (
             <Query pollInterval={500} query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({ loading, error, data }) => {
@@ -123,24 +190,27 @@ class ViewLogoScreen extends Component {
                                             <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
                                                 {(removeLogo, { loading, error }) => (
                                                     <div>
-                                                        <form
-                                                            onSubmit={e => {
-                                                                e.preventDefault();
-                                                                removeLogo({ variables: { id: data.logo._id } });
-                                                            }}>
-                                                            <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
-                                                        <button type="submit" className="btn btn-danger">Delete</button>
-                                                        </form>
+                                                        <div className='row'>
+                                                            <form
+                                                                onSubmit={e => {
+                                                                    e.preventDefault();
+                                                                    removeLogo({ variables: { id: data.logo._id } });
+                                                                }}>
+                                                                <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
+                                                            <button type="submit" className="btn btn-danger">Delete</button>
+                                                            </form>
+                                                            <button id='snap' className="btn btn-success"  onClick={handleSaveImage} style={{backgroundColor:"yellow", color: "black", position: "relative", left: "3px"}}>SNAP</button>
+                                                        </div>
                                                         {loading && <p>Loading...</p>}
                                                         {error && <p>Error :( Please try again</p>}
                                                     </div>
                                                 )}
                                             </Mutation>
-                                        
+
                                         </div>
 
                                         <div style = {{border: "3px solid red", position:'relative'}}>
-                                            <div
+                                            <div id="capture" 
                                                 style = {{
                                                     whiteSpace: 'pre',
                                                     border:"solid",

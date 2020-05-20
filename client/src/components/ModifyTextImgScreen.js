@@ -3,9 +3,6 @@ import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
 import { Link } from 'react-router-dom';
 
-
-
-
 import EditText from './EditText.js'
 import EditImg from './EditImg.js'
 
@@ -90,18 +87,16 @@ class ModifyTextImgScreen extends Component {
     constructor(props) {
         super(props);
 
+        this.state={
+            save: false
+        }
+
+
     }
-
-    // handleTextColorChange = (event) => {
-    //     console.log("handleTextColorChange to " + event.target.value);
-    //     this.setState({ textColor: event.target.value }, this.completeUserEditing);
-    // }
-
-
-    // handleFontSizeChange = (event) => {
-    //     console.log("handleFontSizeChange to " + event.target.value);
-    //     this.setState({ fontSize: event.target.value }, this.completeUserEditing);
-    // }
+    handleSave = () => {
+        console.log("SAVE");
+        this.setState({save: true});
+    }
 
     render() {
         return (
@@ -120,7 +115,6 @@ class ModifyTextImgScreen extends Component {
                                         </Link></h4>
                                     </div>
                                 </div>
-
                                 <div className = "col">
                                     <div className="row" >
                                         <div className = "col-4" style={{backgroundColor: "#cdf5c7"}}> 
@@ -138,61 +132,10 @@ class ModifyTextImgScreen extends Component {
                                                 </button>
 
                                             <Link id="home" to="/">
-                                                <button type="button" className="btn btn-outline-secondary btn-lg">
+                                                <button type="submit" onClick={this.handleSave} className="btn btn-outline-secondary btn-lg">
                                                     SAVE
                                                 </button>
                                             </Link>
-
-                                            {/* <div className = "row">
-                                                <div className = "col">
-                                                    
-                                                    <dt>Background Color:</dt>
-                                                    <dd>{data.logo.backgroundColor}</dd>
-
-                                                    <dt>Border Color:</dt>
-                                                    <dd>{data.logo.borderColor}</dd> 
-
-                                                    <dt>Border Radius:</dt>
-                                                    <dd>{data.logo.borderRadius}</dd> 
-
-                                                    <dt>Border Width:</dt>
-                                                    <dd>{data.logo.borderWidth}</dd> 
-
-                                                </div>
-
-                                                <div className = "col">
-                                                    
-                                                    <dt>width:</dt>
-                                                    <dd>{data.logo.width}</dd> 
-
-                                                    <dt>height:</dt>
-                                                    <dd>{data.logo.height}</dd> 
-
-                                                    <dt>x-axis:</dt>
-                                                    <dd>{data.logo.x}</dd> 
-
-                                                    <dt>y-axis:</dt>
-                                                    <dd>{data.logo.y}</dd> 
-                                                </div>
-                                            </div>
-
-                                            <div style={{border: "3px solid red"}}></div>
-
-                                            <div className = "row">
-                                                <div className = "col">
-                                                    <dt>Padding:</dt>
-                                                    <dd>{data.logo.padding}</dd> 
-                                                </div>
-                                                <div className = "col">
-                                                    <dt>Margin:</dt>
-                                                    <dd>{data.logo.margin}</dd> 
-                                                </div>
-                                            </div>
-
-                                            <dt>Last Updated:</dt>
-                                                <dd style = {{overflow: 'auto'}} >{data.logo.lastUpdate}</dd> */}
-                                                
-
                                         </div>
 
                                         <div style = {{border: "3px solid red", position:'relative'}}>
@@ -218,21 +161,21 @@ class ModifyTextImgScreen extends Component {
                                                     {[...data.logo.imgs]
                                                     .map((img, i) => (
                                                     <div key = {i}>
-                                                        <EditImg imgId={img._id}></EditImg>
+                                                        <EditImg imgId={img._id} save={this.state.save}></EditImg>
                                                     </div>))}
                                                 </div>
                                                 <div>
                                                     {[...data.logo.texts]
                                                     .map((text, i) => (
                                                     <div key = {i}>
-                                                        <EditText textId={text._id}></EditText>
+                                                        <EditText textId={text._id} save={this.state.save}></EditText>
                                                     </div>))}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
                                 </div>
+                            </div>
                         </div>
                     );
                 }}

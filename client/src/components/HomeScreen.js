@@ -30,12 +30,14 @@ class HomeScreen extends Component {
                                 
                                 <div className="col-3">
                                     <h3>Recent Work</h3>
-                                    {data.logos.sort((a, b) => b.lastUpdate > a.lastUpdate).map((logo, index) => 
-                                    (
-                                        <div key={index} className='home_logo_link' style={{ cursor: "pointer", whiteSpace: "pre"}}>
-                                            <Link to={`/view/${logo._id}`}>{logo.logoName}</Link>
-                                        </div>
-                                    ))}
+                                    {data.logos.sort((a, b) => b.lastUpdate > a.lastUpdate).map( 
+                                        (logo, index) => 
+                                        (
+                                            <div key={index} className='home_logo_link' style={{ cursor: "pointer", whiteSpace: "pre"}}>
+                                                <Link to={`/view/${logo._id}`}>{logo.logoName}</Link>
+                                            </div>
+                                        )
+                                    )}
                                 </div>
 
                                 <div className="col-8">
