@@ -34,15 +34,6 @@ class ViewImg extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     return(
-                        // <div style ={{
-                        //     position: 'absolute',
-                        //     backgroundImage: "url("+data.img.url+")",
-                        //     width: data.img.width,
-                        //     height: data.img.height,
-                        //     top: data.img.x + "pt",
-                        //     left: data.img.y + "pt"
-                        // }}>
-                        // </div>
                         <img src={data.img.url} style={{
                             width: data.img.width,
                             height: data.img.height,

@@ -11,6 +11,8 @@ import HomeScreen from './components/HomeScreen';
 import EditLogoScreen from './components/EditLogoScreen';
 import CreateLogoScreen from './components/CreateLogoScreen';
 import ViewLogoScreen from './components/ViewLogoScreen';
+import ModifyTextImgScreen from './components/ModifyTextImgScreen';
+import Load from './components/Load';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -22,6 +24,8 @@ ReactDOM.render(
                 <Route path='/edit/:id' component={EditLogoScreen} />
                 <Route path='/create' component={CreateLogoScreen} />
                 <Route path='/view/:id' component={ViewLogoScreen} />
+                <Route path='/modify/textImag/:id' component={ModifyTextImgScreen} />
+                <Route path='/load' component={Load} />
             </div>
         </Router>
     </ApolloProvider>, 

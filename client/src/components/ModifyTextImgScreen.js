@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
+import gql from "graphql-tag";
+import { Mutation, Query } from "react-apollo";
 import { Link } from 'react-router-dom';
-import '../App.css';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
 
-import ViewText from './ViewText.js'
-import ViewImg from './ViewImg.js'
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -33,16 +30,100 @@ const GET_LOGO = gql`
     }
 `;
 
-
-const DELETE_LOGO = gql`
-  mutation removeLogo($id: String!) {
-    removeLogo(id:$id) {
-      _id
+const ADD_TEXT = gql`
+    mutation AddText(
+        $text: String!,
+        $color: String!,
+        $fontSize: Int!,
+        $x: Int!,
+        $y: Int!,
+        $order: Int!,
+        $logoId: String!
+        ) {
+        addLogo(
+            text: $text,
+            color: $color,
+            fontSize: $fontSize,
+            x: $x,
+            y: $y,
+            order: $order,
+            logoId: $logoId
+            ) {
+            _id
+        }
     }
-  }
 `;
 
-class ViewLogoScreen extends Component {
+const ADD_IMG = gql`
+    mutation AddImg(
+        $name: String!,
+        $url: String!,
+        $width: Int!,
+        $height: Int!,
+        $x: Int!,
+        $y: Int!,
+        $order: Int!,
+        $logoId: String!
+        ) {
+        addLogo(
+            name: $name,
+            url: $url,
+            width: $width,
+            height: $height,
+            x: $x,
+            y: $y,
+            order: $order,
+            logoId: $logoId
+            ) {
+            _id
+        }
+    }
+`;
+
+class ModifyTextImgScreen extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isEnabled: false,
+            logoName: '',
+            backgroundColor: '',
+            borderColor: '',
+            borderRadius: '',
+            borderWidth: '',
+            padding: '',
+            margin: ''
+        }
+    }
+
+    handleTempLogoNameChange = (event) => {
+        console.log("handleTempLogoNameChange to " + event.target.value);
+        this.setState({ logoName: event.target.value });
+
+        let noSpaces = event.target.value.replace(/\s/g, '').length
+        console.log("length of string without spaces: "+ noSpaces)
+        if (event.target.value.replace(/\s/g, '').length === 0){
+            this.setState({isEnabled: false});
+        }
+        else if (event.target.value !== ''){
+            this.setState({isEnabled: true});
+        }
+        else{
+            this.setState({isEnabled: false});
+        }
+    }
+
+    // handleTextColorChange = (event) => {
+    //     console.log("handleTextColorChange to " + event.target.value);
+    //     this.setState({ textColor: event.target.value }, this.completeUserEditing);
+    // }
+
+
+    // handleFontSizeChange = (event) => {
+    //     console.log("handleFontSizeChange to " + event.target.value);
+    //     this.setState({ fontSize: event.target.value }, this.completeUserEditing);
+    // }
 
     render() {
         return (
@@ -120,22 +201,7 @@ class ViewLogoScreen extends Component {
                                                 <dd style = {{overflow: 'auto'}} >{data.logo.lastUpdate}</dd>
                                                 
                                             
-                                            <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
-                                                {(removeLogo, { loading, error }) => (
-                                                    <div>
-                                                        <form
-                                                            onSubmit={e => {
-                                                                e.preventDefault();
-                                                                removeLogo({ variables: { id: data.logo._id } });
-                                                            }}>
-                                                            <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
-                                                        <button type="submit" className="btn btn-danger">Delete</button>
-                                                        </form>
-                                                        {loading && <p>Loading...</p>}
-                                                        {error && <p>Error :( Please try again</p>}
-                                                    </div>
-                                                )}
-                                            </Mutation>
+                                            
                                         
                                         </div>
 
@@ -161,7 +227,7 @@ class ViewLogoScreen extends Component {
                                                 {/* If the text was to be in the bounds of the logo area add
                                                 the bottom to the div on the top which is logo div. */}
                                             
-                                            <div>
+                                            {/* <div>
                                                 {[...data.logo.imgs]
                                                 .map((img, i) => (
                                                 <div key = {i}>
@@ -174,7 +240,7 @@ class ViewLogoScreen extends Component {
                                                 <div key = {i}>
                                                     <ViewText textId={text._id}></ViewText>
                                                 </div>))}
-                                            </div>
+                                            </div> */}
                                            
 
                                         </div>
@@ -192,4 +258,4 @@ class ViewLogoScreen extends Component {
     }
 }
 
-export default ViewLogoScreen;
+export default ModifyTextImgScreen;
