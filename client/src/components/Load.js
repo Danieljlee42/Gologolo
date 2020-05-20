@@ -23,7 +23,7 @@ class Load extends Component {
     componentDidMount() {
         setTimeout(function() { 
             this.setState({render: true}) 
-        }.bind(this), 2000)
+        }.bind(this), 2500)
       }
 
     handleMouseEnter = (addr) => {

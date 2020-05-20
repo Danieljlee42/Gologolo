@@ -4,13 +4,15 @@ import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import Draggable, {DraggableCore} from 'react-draggable';
 
+
+import ViewText from './ViewText.js'
+import ViewImg from './ViewImg.js'
+
 const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
             _id
-            text
-            color
-            fontSize
+            logoName
             backgroundColor
             borderColor
             borderRadius
@@ -19,8 +21,15 @@ const GET_LOGO = gql`
             margin
             width
             height
-            x
-            y
+            texts{
+                _id
+                order
+            }
+            imgs{
+                _id
+                order
+            }
+            lastUpdate
         }
     }
 `;
@@ -28,9 +37,7 @@ const GET_LOGO = gql`
 const UPDATE_LOGO = gql`
     mutation updateLogo(
         $id: String!,
-        $text: String!,
-        $color: String!,
-        $fontSize: Int!,
+        $logoName: String!,
         $backgroundColor: String!,
         $borderColor:, String!
         $borderRadius: Int!,
@@ -38,14 +45,10 @@ const UPDATE_LOGO = gql`
         $padding: Int!,
         $margin: Int!,
         $width: Int!,
-        $height: Int!,
-        $x: Int!,
-        $y: Int!) {
+        $height: Int!,) {
             updateLogo(
                 id: $id,
-                text: $text,
-                color: $color,
-                fontSize: $fontSize,
+                logoName: $logoName
                 backgroundColor: $backgroundColor
                 borderColor: $borderColor,
                 borderRadius: $borderRadius,
@@ -53,9 +56,7 @@ const UPDATE_LOGO = gql`
                 padding: $padding,
                 margin: $margin,
                 width: $width,
-                height: $height,
-                x: $x,
-                y: $y
+                height: $height
                 ) {
                     lastUpdate
                 }
@@ -69,7 +70,7 @@ class EditLogoScreen extends Component {
 
         this.state = {
             isEnabled: true,
-            text: null,
+            logoName: null,
             textColor: null,
             fontSize: null,
             backgroundColor: null,
@@ -78,18 +79,14 @@ class EditLogoScreen extends Component {
             borderWidth: null,
             padding: null,
             margin: null,
-            x: null,
-            y: null,
             width: null,
-            height: null,
-            imgWidth: null,
-            imgHeight: null
+            height: null
         }
     }
 
-    handleTempTextChange = (event) => {
-        console.log("handleTempTextChange to " + event.target.value);
-        this.setState({ text: event.target.value });
+    handleTempLogoNameChange  = (event) => {
+        console.log("handleLogoNameChange to " + event.target.value);
+        this.setState({ logoName: event.target.value });
 
         let noSpaces = event.target.value.replace(/\s/g, '').length
         console.log("length of string without spaces: "+ noSpaces)
@@ -104,11 +101,6 @@ class EditLogoScreen extends Component {
         }
     }
 
-    handleTextColorChange = (event) => {
-        console.log("handleTextColorChange to " + event.target.value);
-        this.setState({ textColor: event.target.value }, this.completeUserEditing);
-    }
-
     handleBackgroundColorChange = (event) => {
         console.log("handleBackgroundColorChange to " + event.target.value);
         this.setState({ backgroundColor: event.target.value }, this.completeUserEditing);
@@ -117,11 +109,6 @@ class EditLogoScreen extends Component {
     handleBorderColorChange = (event) => {
         console.log("handleBorderColorChange to " + event.target.value);
         this.setState({ borderColor: event.target.value }, this.completeUserEditing);
-    }
-
-    handleFontSizeChange = (event) => {
-        console.log("handleFontSizeChange to " + event.target.value);
-        this.setState({ fontSize: event.target.value }, this.completeUserEditing);
     }
 
     handleBorderRadiusChange = (event) => {
@@ -144,12 +131,12 @@ class EditLogoScreen extends Component {
         this.setState({ padding: event.target.value }, this.completeUserEditing);
     }
 
-    handlePositionChange = (e, position) => {
-        const {x, y} = position;
-        console.log("handlePositionChangeComplete to x= " + x + " y= " + y);
-        this.setState({x: x});
-        this.setState({y: y}, this.completeUserEditing);
-    }
+    // handlePositionChange = (e, position) => {
+    //     const {x, y} = position;
+    //     console.log("handlePositionChangeComplete to x= " + x + " y= " + y);
+    //     this.setState({x: x});
+    //     this.setState({y: y}, this.completeUserEditing);
+    // }
 
     handleSizeChange = (e, position) => {
         const {x, y} = position;
@@ -164,15 +151,15 @@ class EditLogoScreen extends Component {
         return( 
             <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
                 {({data}) => { 
-                    console.log("handlePaddingChangeComplete to " + data.logo.text);
-                    this.setState({ text: data.logo.text})
+                    console.log("handlePaddingChangeComplete to " + data.logo.logoName);
+                    this.setState({ logoName: data.logo.logoName})
                 }}
             </Query>
         )
     }
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, x, y, width, height
+        let logoName, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, width, height
 
 
         return (
@@ -190,24 +177,20 @@ class EditLogoScreen extends Component {
                     }
 
 
-                    if (this.state.text===null) { 
-                        this.setState({ text: data.logo.text });
-                        this.setState({ textColor: data.logo.color });
-                        this.setState({ fontSize: data.logo.fontSize });
+                    if (this.state.logoName===null) { 
+                        this.setState({ logoName: data.logo.logoName });
                         this.setState({ backgroundColor: data.logo.backgroundColor})
                         this.setState({ borderColor: data.logo.borderColor})
                         this.setState({ borderRadius: data.logo.borderRadius });
                         this.setState({ borderWidth: data.logo.borderWidth });
                         this.setState({ padding: data.logo.padding });
                         this.setState({ margin: data.logo.margin });
-                        this.setState({ x: data.logo.x });
-                        this.setState({ y: data.logo.y });
                         this.setState({ width: data.logo.width });
                         this.setState({ height: data.logo.height });
-                    } 
-        
+                    }
+                    
                     return (
-                        <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
+                        <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/modify/textImag/`+this.props.match.params.id)}>
                             {(updateLogo, { loading, error }) => (
                                 <div className="container">
                                     <div className="panel panel-default" style={{backgroundColor: "lightyellow"}}>
@@ -231,28 +214,19 @@ class EditLogoScreen extends Component {
                                                         e.preventDefault();
                                                         updateLogo({ variables: { 
                                                             id: data.logo._id, 
-                                                            text: text.value, 
-                                                            color: color.value, 
-                                                            fontSize: parseInt(fontSize.value),
+                                                            logoName: logoName.value, 
                                                             backgroundColor: backgroundColor.value, 
                                                             borderColor: borderColor.value, 
                                                             borderRadius: parseInt(borderRadius.value), 
                                                             borderWidth: parseInt(borderWidth.value), 
                                                             padding: parseInt(padding.value), 
                                                             margin: parseInt(margin.value),
-                                                            x: parseInt(x.value),
-                                                            y: parseInt(y.value),
-                                                            height: parseInt(y.value),
                                                             width: parseInt(width.value),
                                                             height: parseInt(height.value)
                                                         }});
-                                                        x.value = "";
-                                                        y.value = "";
                                                         width.value = "";
                                                         height.value = "";
-                                                        text.value = "";
-                                                        color.value = "";
-                                                        fontSize.value = "";
+                                                        logoName.value = "";
                                                         backgroundColor.value = ""; 
                                                         borderColor.value = ""; 
                                                         borderRadius.value = ""; 
@@ -264,41 +238,15 @@ class EditLogoScreen extends Component {
                                                         <div className='row'>
                                                             <div className='col'>
                                                                 <div className="form-group">
-                                                                    <label htmlFor="text">Text:</label>
+                                                                    <label htmlFor="logoName">Logo Name:</label>
                                                                     <input 
-                                                                        type="text" 
+                                                                        type="logoName" 
                                                                         className="form-control" 
-                                                                        name="text" 
-                                                                        ref={node => {text = node;}} 
-                                                                        placeholder="Text" 
-                                                                        defaultValue={data.logo.text} 
-                                                                        onChange={this.handleTempTextChange}
-                                                                        />
-                                                                </div>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="color">Color:</label>
-                                                                    <input 
-                                                                        type="color" 
-                                                                        className="form-control" 
-                                                                        name="color" 
-                                                                        ref={node => {color = node;}} 
-                                                                        placeholder="Color" 
-                                                                        defaultValue={data.logo.color} 
-                                                                        onChange={this.handleTextColorChange}
-                                                                        />
-                                                                </div>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="fontSize">Font Size:</label>
-                                                                    <input 
-                                                                        type="number" 
-                                                                        min = "2"
-                                                                        max = "144"
-                                                                        className="form-control" 
-                                                                        name="fontSize" 
-                                                                        ref={node => {fontSize = node;}} 
-                                                                        placeholder="Font Size" 
-                                                                        defaultValue={data.logo.fontSize}
-                                                                        onChange={this.handleFontSizeChange}
+                                                                        name="logoName" 
+                                                                        ref={node => {logoName = node;}} 
+                                                                        placeholder="Logo Name" 
+                                                                        defaultValue={data.logo.logoName} 
+                                                                        onChange={this.handleTempLogoNameChange}
                                                                         />
                                                                 </div>
                                                                 <div className="form-group">
@@ -357,28 +305,7 @@ class EditLogoScreen extends Component {
                                                                         onChange={this.handleBorderWidthChange}
                                                                         />
                                                                 </div>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="x">x-axis:</label>
-                                                                    <input 
-                                                                        disabled= "true"
-                                                                        //type="number" 
-                                                                        className="form-control" 
-                                                                        name="x" 
-                                                                        ref={node => {x = node;}}
-                                                                        defaultValue={this.state.x}
-                                                                        />
-                                                                </div>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="y">y-axis:</label>
-                                                                    <input 
-                                                                        disabled= "true"
-                                                                        //type="number" 
-                                                                        className="form-control" 
-                                                                        name="y" 
-                                                                        ref={node => {y = node;}}
-                                                                        defaultValue={this.state.y}
-                                                                        />
-                                                                </div>
+                                                               
                                                                 <div className="form-group">
                                                                     <label htmlFor="width">width:</label>
                                                                     <input 
@@ -442,7 +369,7 @@ class EditLogoScreen extends Component {
                                                     </div>
 
 
-                                                    <button type="submit" className="btn btn-success" disabled={!this.state.isEnabled}>Submit</button>
+                                                    <button type="submit" className="btn btn-success" disabled={!this.state.isEnabled}>SAVE & NEXT</button>
                                                     </form>
                                                     {loading && <p>Loading...</p>}
                                                     {error && <p>Error :( Please try again</p>}
@@ -464,9 +391,23 @@ class EditLogoScreen extends Component {
                                                         margin: this.state.margin + "px",
                                                         width: this.state.width + "px",
                                                         height: this.state.height + "px",
-                                                        //maxWidth: "100px",
-                                                        //maxHeight: "100px"
                                                         }}>
+                                                            <div>
+                                                                {[...data.logo.imgs]
+                                                                .map((img, i) => (
+                                                                <div key = {i}>
+                                                                    <ViewImg imgId={img._id}></ViewImg>
+                                                                </div>))}
+                                                            </div>
+                                                            <div>
+                                                                {[...data.logo.texts]
+                                                                .map((text, i) => (
+                                                                <div key = {i}>
+                                                                    <ViewText textId={text._id}></ViewText>
+                                                                </div>))}
+                                                            </div>
+
+
                                                             <Draggable
                                                                 handle=".handle"
                                                                 bounds= {{left: 0, top: 0, right: 500, bottom: 500}}

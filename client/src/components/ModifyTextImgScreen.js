@@ -4,6 +4,11 @@ import { Mutation, Query } from "react-apollo";
 import { Link } from 'react-router-dom';
 
 
+
+
+import EditText from './EditText.js'
+import EditImg from './EditImg.js'
+
 const GET_LOGO = gql`
     query logo($logoId: String) {
         logo(id: $logoId) {
@@ -85,33 +90,6 @@ class ModifyTextImgScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isEnabled: false,
-            logoName: '',
-            backgroundColor: '',
-            borderColor: '',
-            borderRadius: '',
-            borderWidth: '',
-            padding: '',
-            margin: ''
-        }
-    }
-
-    handleTempLogoNameChange = (event) => {
-        console.log("handleTempLogoNameChange to " + event.target.value);
-        this.setState({ logoName: event.target.value });
-
-        let noSpaces = event.target.value.replace(/\s/g, '').length
-        console.log("length of string without spaces: "+ noSpaces)
-        if (event.target.value.replace(/\s/g, '').length === 0){
-            this.setState({isEnabled: false});
-        }
-        else if (event.target.value !== ''){
-            this.setState({isEnabled: true});
-        }
-        else{
-            this.setState({isEnabled: false});
-        }
     }
 
     // handleTextColorChange = (event) => {
@@ -148,10 +126,24 @@ class ModifyTextImgScreen extends Component {
                                         <div className = "col-4" style={{backgroundColor: "#cdf5c7"}}> 
                                             <div style={{padding: 10}}>
                                                 <h3 className="panel-title" style = {{fontSize: '1.5vw', textAlign: 'center', whiteSpace: 'pre', overflow: 'auto'}}>
-                                                    View Logo: {data.logo.logoName}</h3>
+                                                    Add Texts & Imgs : {data.logo.logoName}</h3>
                                             </div>
                                             
-                                            <div className = "row">
+                                            <button type="button" className="btn btn-outline-secondary btn-lg">
+                                                    Add Text
+                                                </button>
+
+                                                <button type="button" className="btn btn-outline-secondary btn-lg">
+                                                    Add Image
+                                                </button>
+
+                                            <Link id="home" to="/">
+                                                <button type="button" className="btn btn-outline-secondary btn-lg">
+                                                    SAVE
+                                                </button>
+                                            </Link>
+
+                                            {/* <div className = "row">
                                                 <div className = "col">
                                                     
                                                     <dt>Background Color:</dt>
@@ -198,11 +190,9 @@ class ModifyTextImgScreen extends Component {
                                             </div>
 
                                             <dt>Last Updated:</dt>
-                                                <dd style = {{overflow: 'auto'}} >{data.logo.lastUpdate}</dd>
+                                                <dd style = {{overflow: 'auto'}} >{data.logo.lastUpdate}</dd> */}
                                                 
-                                            
-                                            
-                                        
+
                                         </div>
 
                                         <div style = {{border: "3px solid red", position:'relative'}}>
@@ -223,31 +213,24 @@ class ModifyTextImgScreen extends Component {
                                                     height: data.logo.height,
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
-                                            </div>
-                                                {/* If the text was to be in the bounds of the logo area add
-                                                the bottom to the div on the top which is logo div. */}
-                                            
-                                            {/* <div>
-                                                {[...data.logo.imgs]
-                                                .map((img, i) => (
-                                                <div key = {i}>
-                                                    <ViewImg imgId={img._id}></ViewImg>
-                                                </div>))}
-                                            </div>
-                                            <div>
-                                                {[...data.logo.texts]
-                                                .map((text, i) => (
-                                                <div key = {i}>
-                                                    <ViewText textId={text._id}></ViewText>
-                                                </div>))}
-                                            </div> */}
-                                           
 
+                                                <div>
+                                                    {[...data.logo.imgs]
+                                                    .map((img, i) => (
+                                                    <div key = {i}>
+                                                        <EditImg imgId={img._id}></EditImg>
+                                                    </div>))}
+                                                </div>
+                                                <div>
+                                                    {[...data.logo.texts]
+                                                    .map((text, i) => (
+                                                    <div key = {i}>
+                                                        <EditText textId={text._id}></EditText>
+                                                    </div>))}
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        
                                     </div>
-                                    
                                     </div>
                                 </div>
                         </div>

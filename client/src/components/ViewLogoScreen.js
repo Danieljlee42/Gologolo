@@ -157,24 +157,25 @@ class ViewLogoScreen extends Component {
                                                     height: data.logo.height,
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
+                                                
+                                                {/*the text in the bounds of the logo area  */}
+                                                <div>
+                                                    {[...data.logo.imgs]
+                                                    .map((img, i) => (
+                                                    <div key = {i}>
+                                                        <ViewImg imgId={img._id}></ViewImg>
+                                                    </div>))}
+                                                </div>
+                                                <div>
+                                                    {[...data.logo.texts]
+                                                    .map((text, i) => (
+                                                    <div key = {i}>
+                                                        <ViewText textId={text._id}></ViewText>
+                                                    </div>))}
+                                                </div>
                                             </div>
-                                                {/* If the text was to be in the bounds of the logo area add
-                                                the bottom to the div on the top which is logo div. */}
                                             
-                                            <div>
-                                                {[...data.logo.imgs]
-                                                .map((img, i) => (
-                                                <div key = {i}>
-                                                    <ViewImg imgId={img._id}></ViewImg>
-                                                </div>))}
-                                            </div>
-                                            <div>
-                                                {[...data.logo.texts]
-                                                .map((text, i) => (
-                                                <div key = {i}>
-                                                    <ViewText textId={text._id}></ViewText>
-                                                </div>))}
-                                            </div>
+                                            
                                            
 
                                         </div>
