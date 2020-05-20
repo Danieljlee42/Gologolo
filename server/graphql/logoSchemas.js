@@ -25,7 +25,7 @@ var TextModel = require('../models/Text');
 
 
 var textType = new GraphQLObjectType({
-    name: 'Text',
+    name: 'text',
     fields: function () {
         return{
             _id: { type: GraphQLID },
@@ -59,7 +59,13 @@ var logoType = new GraphQLObjectType({
             margin:{type: GraphQLInt},
             width:{type: GraphQLInt},
             height:{type: GraphQLInt},
-            lastUpdate: {type: GraphQLDate}
+            lastUpdate: {type: GraphQLDate},
+            texts: {
+                type: GraphQLList(textType),
+                resolve(parent, args){
+                    return TextModel.find({logoId: parent.id})
+                }
+            }
         }
     }
 });
@@ -100,8 +106,8 @@ var mutation = new GraphQLObjectType({
             addText:{
                 type: textType,
                 args: {
-                    id: { type: new GraphQLNonNull(GraphQLID)},
                     text: { type: new GraphQLNonNull(GraphQLString)},
+                    color: {type: new GraphQLNonNull(GraphQLString)},
                     fontSize: { type: new GraphQLNonNull(GraphQLInt)},
                     x: { type: new GraphQLNonNull(GraphQLInt)},
                     y: { type: new GraphQLNonNull(GraphQLInt)},
@@ -218,10 +224,19 @@ var mutation = new GraphQLObjectType({
                 },
                 resolve(root, params) {
                     const remLogo = LogoModel.findByIdAndRemove(params.id).exec();
-                    if (!remLogo) {
-                        throw new Error('Error')
-                    }
+                    if (!remLogo) {throw new Error('Error')}
                     return remLogo;
+                }
+                //@todo need to remove the texts and images that comes with the logo
+
+            },
+            removeText: {
+                type: textType,
+                args: {id: {type: new GraphQLNonNull(GraphQLString)}},
+                resolve(root, params) {
+                    const remText = TextModel.findByIdAndRemove(params.id).exec();
+                    if (!remText) {throw new Error('Error')}
+                    return remText;
                 }
             }
         }
