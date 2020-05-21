@@ -7,12 +7,12 @@ var ImgSchema = new mongoose.Schema({
    url: String,
 
    //dimension
-   width: { type: Number, min: 50, max: 144 },
-   height: { type: Number, min: 50, max: 144 },
+   width: Number,
+   height: Number,
 
    //position
-   x: {type: Number, min: 0, max: 500},
-   y: {type: Number, min: 0, max: 500},
+   x: Number,
+   y: Number,
 
    //order
    order: {type: Number, min: 0}, //cant be negative

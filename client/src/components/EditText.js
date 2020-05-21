@@ -54,7 +54,7 @@ class EditText extends Component {
                     return(
                         <Rnd 
                             style = {{
-                                //display: "flex",
+                                display: "flex",
                                 //alignItems: "center",
                                 position: "absolute",
                                 justifyContent: "center",

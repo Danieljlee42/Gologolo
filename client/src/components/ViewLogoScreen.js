@@ -4,7 +4,6 @@ import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import html2canvas from 'html2canvas';
-import htmlToImage from 'html-to-image';
 
 import ViewText from './ViewText.js'
 import ViewImg from './ViewImg.js'
@@ -89,8 +88,7 @@ class ViewLogoScreen extends Component {
                     //foreignObjectRendering: true, 
                     imageTimeout: 15000, 
                     //removeContainer: true,
-                    useCORS: true,
-                    width: 700
+                    useCORS: true
                 }).then(canvas => {
                     saveAs(canvas.toDataURL(), 'file-name.png');
                 });
@@ -100,12 +98,8 @@ class ViewLogoScreen extends Component {
             if (typeof link.download === 'string') {
                 link.href = uri;
                 link.download = filename;
-                //Firefox requires the link to be in the body
                 document.body.appendChild(link);
-                //simulate click
                 link.click();
-                //remove the link when done
-                //document.body.removeChild(link);
             } else {
                 window.open(uri);
             }
@@ -170,7 +164,7 @@ class ViewLogoScreen extends Component {
                                                 </div>
                                             </div>
 
-                                            <div style={{border: "3px solid red"}}></div>
+                                            <div style={{border: "1px solid gray"}}></div>
 
                                             <div className = "row">
                                                 <div className = "col">
@@ -215,6 +209,7 @@ class ViewLogoScreen extends Component {
                                                     whiteSpace: 'pre',
                                                     border:"solid",
                                                     position: "relative",
+                                                    overflow: "auto",
                                                     backgroundColor:data.logo.backgroundColor,
                                                     borderColor:data.logo.borderColor,
                                                     borderRadius:data.logo.borderRadius,

@@ -40,9 +40,9 @@ const ADD_TEXT = gql`
         $x: Int!,
         $y: Int!,
         $order: Int!,
-        $logoId: String!
+        $logoId: ID!
         ) {
-        addLogo(
+        addText(
             text: $text,
             color: $color,
             fontSize: $fontSize,
@@ -122,10 +122,45 @@ class ModifyTextImgScreen extends Component {
                                                 <h3 className="panel-title" style = {{fontSize: '1.5vw', textAlign: 'center', whiteSpace: 'pre', overflow: 'auto'}}>
                                                     Add Texts & Imgs : {data.logo.logoName}</h3>
                                             </div>
-                                            
-                                            <button type="button" className="btn btn-outline-secondary btn-lg">
-                                                    Add Text
-                                                </button>
+
+                                                <Mutation mutation={ADD_TEXT}>
+                                                    {(AddText, { loading, error }) => (
+                                                        <form onSubmit={e => {
+                                                            console.log("ADD")
+                                                            e.preventDefault();
+                                                            
+                                                            AddText({ variables: { 
+                                                                text: "SampleText", 
+                                                                color: "#FFFFFF", 
+                                                                fontSize: parseInt(12), 
+                                                                x: parseInt(0), 
+                                                                y: parseInt(0), 
+                                                                order: parseInt(0),
+                                                                logoId: this.props.match.params.id
+                                                                // text: text.value, 
+                                                                // color: color.value, 
+                                                                // fontSize: parseInt(fontSize.value), 
+                                                                // x: parseInt(x.value), 
+                                                                // y: parseInt(y.value), 
+                                                                // order: parseInt(order.value),
+                                                                // logoId: logoId.value
+                                                            }});
+
+                                                            // text.value = '',
+                                                            // color.value = '',
+                                                            // fontSize.value = '',
+                                                            // x.value = '',
+                                                            // y.value = '',
+                                                            // order.value = '',
+                                                            // logoId.value = ''
+                                                        }}>
+                                                            <button type="submit" className="btn btn-outline-secondary btn-lg">
+                                                                Add Text
+                                                            </button>
+                                                        </form> 
+                                                    )}
+                                                </Mutation>                                              
+                                                
 
                                                 <button type="button" className="btn btn-outline-secondary btn-lg">
                                                     Add Image
@@ -144,6 +179,7 @@ class ModifyTextImgScreen extends Component {
                                                     whiteSpace: 'pre',
                                                     border:"solid",
                                                     position: "relative",
+                                                    overflow: "auto",
                                                     backgroundColor:data.logo.backgroundColor,
                                                     borderColor:data.logo.borderColor,
                                                     borderRadius:data.logo.borderRadius,
@@ -157,17 +193,17 @@ class ModifyTextImgScreen extends Component {
                                                     lastUpdate:data.logo.lastUpdate,
                                                 }}>
 
-                                                <div>
+                                                <div >
                                                     {[...data.logo.imgs]
                                                     .map((img, i) => (
-                                                    <div key = {i}>
+                                                    <div key = {i} style={{position: "absolute", left: 0, top: 0}}>
                                                         <EditImg imgId={img._id} save={this.state.save}></EditImg>
                                                     </div>))}
                                                 </div>
-                                                <div>
+                                                <div >
                                                     {[...data.logo.texts]
                                                     .map((text, i) => (
-                                                    <div key = {i}>
+                                                    <div key = {i} style={{position: "absolute", left: 0, top: 0}}>
                                                         <EditText textId={text._id} save={this.state.save}></EditText>
                                                     </div>))}
                                                 </div>

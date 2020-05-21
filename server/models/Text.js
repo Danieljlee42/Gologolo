@@ -5,7 +5,7 @@ var TextSchema = new mongoose.Schema({
    //texts stuff
    text: String,
    color: String,
-   fontSize: { type: Number, min: 2, max: 144 },
+   fontSize: { type: Number, min: 1, max: 144 },
 
    //position
    x: {type: Number, min: 0, max: 500},

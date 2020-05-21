@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
-import Draggable from 'react-draggable';
 
 
 import ViewText from './ViewText.js'
@@ -130,20 +129,14 @@ class EditLogoScreen extends Component {
         console.log("handlePaddingChangeComplete to " + event.target.value);
         this.setState({ padding: event.target.value }, this.completeUserEditing);
     }
-
-    // handlePositionChange = (e, position) => {
-    //     const {x, y} = position;
-    //     console.log("handlePositionChangeComplete to x= " + x + " y= " + y);
-    //     this.setState({x: x});
-    //     this.setState({y: y}, this.completeUserEditing);
-    // }
-
     handleSizeChange = (e, position) => {
         const {x, y} = position;
         console.log("handlePositionChangeComplete to x= " + x + " y= " + y);
         this.setState({width: x});
         this.setState({height: y}, this.completeUserEditing);
     }
+    handleWidthChange = (event) => { this.setState({ width: event.target.value }, this.completeUserEditing);}
+    handleHeightChange = (event) => { this.setState({ height: event.target.value }, this.completeUserEditing);}
 
 
     componentDidMount(){
@@ -206,7 +199,7 @@ class EditLogoScreen extends Component {
 
                                         <div className='col'>
                                             <div className='row'>
-                                                <div className="panel-body" class="col-4" style={{backgroundColor: "#cdf5c7"}}>
+                                                <div className="col-4" style={{backgroundColor: "#cdf5c7"}}>
                                                     <div style={{padding: 10}}>
                                                         <h3 className="panel-title" style = {{textAlign: 'center'}}>Edit Logo</h3>
                                                     </div>
@@ -309,23 +302,27 @@ class EditLogoScreen extends Component {
                                                                 <div className="form-group">
                                                                     <label htmlFor="width">width:</label>
                                                                     <input 
-                                                                        disabled= "true"
-                                                                        //type="number" 
+                                                                        type="number" 
+                                                                        min = "100"
+                                                                        max = "700"
                                                                         className="form-control" 
                                                                         name="width" 
                                                                         ref={node => {width = node;}}
                                                                         defaultValue={this.state.width}
+                                                                        onChange={this.handleWidthChange}
                                                                         />
                                                                 </div>
                                                                 <div className="form-group">
                                                                     <label htmlFor="height">height:</label>
                                                                     <input 
-                                                                        disabled= "true"
-                                                                        //type="number" 
+                                                                        type="number" 
+                                                                        min = "100"
+                                                                        max = "700"
                                                                         className="form-control" 
                                                                         name="height" 
                                                                         ref={node => {height = node;}}
                                                                         defaultValue={this.state.height}
+                                                                        onChange={this.handleHeightChange}
                                                                         />
                                                                 </div>
                                                             </div>
@@ -369,74 +366,46 @@ class EditLogoScreen extends Component {
                                                     </div>
 
 
-                                                    <button type="submit" className="btn btn-success" disabled={!this.state.isEnabled}>SAVE & NEXT</button>
+                                                    <button type="submit" className="btn btn-success" disabled={!this.state.isEnabled}>SAVE / NEXT</button>
                                                     </form>
                                                     {loading && <p>Loading...</p>}
                                                     {error && <p>Error :( Please try again</p>}
                                                     {errorMsg}
                                                 </div>
                                                 
-                                                
-
                                                 <div>
-                                                <div style={{ position: "absolute", border: "3px solid red"}}>
-                                                    <div style={{
-                                                        position: "relative",
-                                                        border: "solid",
-                                                        backgroundColor: this.state.backgroundColor,
-                                                        borderColor: this.state.borderColor,
-                                                        borderRadius: this.state.borderRadius + "px",
-                                                        borderWidth: this.state.borderWidth + "px",
-                                                        padding: this.state.padding + "px",
-                                                        margin: this.state.margin + "px",
-                                                        width: this.state.width + "px",
-                                                        height: this.state.height + "px",
-                                                        }}>
-                                                            <div>
-                                                                {[...data.logo.imgs]
-                                                                .map((img, i) => (
-                                                                <div key = {i}>
-                                                                    <ViewImg imgId={img._id}></ViewImg>
-                                                                </div>))}
-                                                            </div>
-                                                            <div>
-                                                                {[...data.logo.texts]
-                                                                .map((text, i) => (
-                                                                <div key = {i}>
-                                                                    <ViewText textId={text._id}></ViewText>
-                                                                </div>))}
-                                                            </div>
-
-
-                                                            <Draggable
-                                                                handle=".handle"
-                                                                bounds= {{left: 0, top: 0, right: 500, bottom: 500}}
-                                                                position={{x: this.state.width, y: this.state.height}}
-                                                                grid={[1, 1]}
-                                                                scale={1}
-                                                                onStart={this.handleStart}
-                                                                onDrag={this.handleDrag, this.handleSizeChange}
-                                                                onStop={this.handleStop}>
+                                                    <div style={{ position: "absolute", border: "3px solid red"}}>
+                                                        <div style={{
+                                                            position: "relative",
+                                                            border: "solid",
+                                                            overflow: "auto",
+                                                            backgroundColor: this.state.backgroundColor,
+                                                            borderColor: this.state.borderColor,
+                                                            borderRadius: this.state.borderRadius + "px",
+                                                            borderWidth: this.state.borderWidth + "px",
+                                                            padding: this.state.padding + "px",
+                                                            margin: this.state.margin + "px",
+                                                            width: this.state.width + "px",
+                                                            height: this.state.height + "px",
+                                                            }}>
                                                                 <div>
-                                                                    <div className="handle">
-                                                                        <div 
-                                                                            style = {{
-                                                                                whiteSpace: 'pre',
-                                                                                position: 'absolute',
-                                                                                border: '1px solid blue',
-                                                                                fontSize: "15px"
-
-                                                                            }}>
-                                                                            Drag Me to resize 
-                                                                        </div>
-                                                                    </div>
+                                                                    {[...data.logo.imgs]
+                                                                    .map((img, i) => (
+                                                                    <div key = {i}>
+                                                                        <ViewImg imgId={img._id}></ViewImg>
+                                                                    </div>))}
                                                                 </div>
-                                                            </Draggable>
+                                                                <div>
+                                                                    {[...data.logo.texts]
+                                                                    .map((text, i) => (
+                                                                    <div key = {i}>
+                                                                        <ViewText textId={text._id}></ViewText>
+                                                                    </div>))}
+                                                                </div>
+                                                        </div>
                                                     </div>
-                                                    
-                                                    
                                                 </div>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
