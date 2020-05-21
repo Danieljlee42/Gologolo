@@ -131,7 +131,7 @@ class ModifyTextImgScreen extends Component {
                                                             
                                                             AddText({ variables: { 
                                                                 text: "SampleText", 
-                                                                color: "#FFFFFF", 
+                                                                color: "#000000", 
                                                                 fontSize: parseInt(12), 
                                                                 x: parseInt(0), 
                                                                 y: parseInt(0), 

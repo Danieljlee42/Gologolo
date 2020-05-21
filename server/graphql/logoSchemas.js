@@ -321,11 +321,7 @@ var mutation = new GraphQLObjectType({
             },
             removeLogo: {
                 type: logoType,
-                args: {
-                    id: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    }
-                },
+                args: {id: {type: new GraphQLNonNull(GraphQLString)}},
                 resolve(root, params) {
                     const remLogo = LogoModel.findByIdAndRemove(params.id).exec();
                     if (!remLogo) {throw new Error('Error')}

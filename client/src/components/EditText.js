@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../App.css';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import {Rnd} from 'react-rnd'
 
 const GET_TEXT = gql`
@@ -18,6 +18,14 @@ const GET_TEXT = gql`
     } 
 `;
 
+const REMOVE_TEXT = gql`
+    mutation removeText($id: String!){
+        removeText(id:$id){
+            _id
+        }
+    }
+`;
+
 // DISPLAY THE TEXT COMPONENT
 class EditText extends Component {
 
@@ -25,6 +33,7 @@ class EditText extends Component {
         super(props);
 
         this.state = {
+            id: "",
             text: "",
             color: "",
             fontSize: "",
@@ -34,6 +43,14 @@ class EditText extends Component {
         }
     }
 
+    componentDidMount(){
+        this.mounted = true;
+    }
+
+    componentWillUnmount(){
+        this.mounted = false;
+    }
+
     render() {
         return (
             console.log(this.props.textId),
@@ -41,6 +58,10 @@ class EditText extends Component {
                 {({loading, error, data}) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
+
+                    if (this.state.id === ""){
+                        this.setState({ id: data.text.id});
+                    }
 
                     if (this.state.text === ""){
                         this.setState({ text: data.text.name});
@@ -58,7 +79,7 @@ class EditText extends Component {
                                 //alignItems: "center",
                                 position: "absolute",
                                 justifyContent: "center",
-                                border: "solid 1px #ddd",
+                                border: "solid 1px #eee",
                                 background: "$f0f0f0"
                             }}
                             default = {{
@@ -79,6 +100,22 @@ class EditText extends Component {
                                 }}>
                                 {data.text.text}
                             </div>
+                            <Mutation mutation={REMOVE_TEXT} key={this.props.textId}>
+                                {(removeText) => (
+                                    <div>
+                                        <form
+                                            onSubmit={e => {
+                                                e.preventDefault();
+                                                removeText({ variables: { id: this.props.textId } });
+                                            }}>
+                                        <button type="submit" className="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                )}
+                            </Mutation>
+
+
+
                         </Rnd>
                     )
                 }}
