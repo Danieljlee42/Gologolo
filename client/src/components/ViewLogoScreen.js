@@ -156,11 +156,6 @@ class ViewLogoScreen extends Component {
                                                     <dt>height:</dt>
                                                     <dd>{data.logo.height}</dd> 
 
-                                                    <dt>x-axis:</dt>
-                                                    <dd>{data.logo.x}</dd> 
-
-                                                    <dt>y-axis:</dt>
-                                                    <dd>{data.logo.y}</dd> 
                                                 </div>
                                             </div>
 

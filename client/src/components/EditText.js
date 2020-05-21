@@ -18,6 +18,30 @@ const GET_TEXT = gql`
     } 
 `;
 
+const UPDATE_TEXT = gql`
+    mutation updateText(
+        $id: String!,
+        $text: String!,
+        $color: String!,
+        $fontSize: Int!,
+        $x: Int!,
+        $y: Int!,
+        $order: Int!) {
+            updateText(
+                id: $id,
+                text: $text,
+                color: $color,
+                fontSize: $fontSize,
+                x: $x,
+                y: $y,
+                order: $order
+            ){
+                _id
+            }
+        }
+`;
+
+
 const REMOVE_TEXT = gql`
     mutation removeText($id: String!){
         removeText(id:$id){
@@ -124,8 +148,36 @@ class EditText extends Component {
                                     </div>
                                 )}
                             </Mutation>
-
-
+                            <Mutation mutation={UPDATE_TEXT} key={this.state.id}>
+                                    {(updateText) => (
+                                        <form onSubmit={e => {
+                                            console.log("UPDATE TEXT")
+                                            e.preventDefault();
+                                            updateText({ variables: { 
+                                                id: this.props.textId,
+                                                text: this.state.text,
+                                                color: this.state.color,
+                                                fontSize: parseInt(this.state.fontSize),
+                                                x: parseInt(this.state.x),
+                                                y: parseInt(this.state.y),
+                                                order: parseInt(this.state.order)
+                                            }});
+                                        }}>
+                                            <button type="submit" class="btn btn-primary" style={{
+                                                borderRadius: 1000, 
+                                                position: "absolute", 
+                                                display: "flex", 
+                                                width: "15px", 
+                                                justifyContent: "center", 
+                                                alignItems: "center", 
+                                                height: "15px", 
+                                                left: -15,
+                                                bottom: -15,
+                                                fontSize: "6pt"}}>Save</button>
+                                            
+                                        </form>
+                                    )}
+                                </Mutation>
 
                         </Rnd>
                     )

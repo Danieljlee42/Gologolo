@@ -33,12 +33,14 @@ const UPDATE_IMG = gql`
                 id: $id,
                 name: $name,
                 url: $url,
-                x: $x,
-                y: $y,
                 width: $width,
                 height: $height,
+                x: $x,
+                y: $y,
                 order: $order
-            )
+            ){
+                _id
+            }
         }
 `;
 
@@ -57,6 +59,7 @@ class EditImg extends Component {
         super(props);
 
         this.state = {
+            id: "",
             name: "",
             url: "",
             width: "",
@@ -76,7 +79,8 @@ class EditImg extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
 
-                    if (this.state.name === ""){
+                    if (this.state.id === ""){
+                        this.setState({ id: data.img.id});
                         this.setState({ name: data.img.name});
                         this.setState({ url: data.img.url});
                         this.setState({ width: data.img.width});
@@ -96,100 +100,94 @@ class EditImg extends Component {
                     
                     //if (this.props.save){
                         return(
-                            // <Mutation mutation={UPDATE_IMG} key={this.props.imgId}>
-                            //    {(updateImg) => (
-                            //         <div>
-                            //             <form onSubmit={e => {
-                            //                 e.preventDefault();
-                            //                 console.log(this.props.imgId+' '+this.state.name+' '+this.state.url+' '+this.state.width+' '+this.state.height+' '+
-                            //                 this.state.x+' '+this.state.y+' '+this.state.order)
-                            //                 updateImg({ variables: { 
-                            //                     id: this.props.imgId,
-                            //                     name: name,
-                            //                     url: url,
-                            //                     width: parseInt(width),
-                            //                     height: parseInt(height),
-                            //                     x: parseInt(x),
-                            //                     y: parseInt(y),
-                            //                     order: parseInt(order)
-                            //                 }});
-                            //             }}>
-                                        <Rnd 
-                                            style = {{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                border: "solid 1px #ddd",
-                                                background: "$f0f0f0"
-                                            }}
-                                            default = {{
-                                                //x : data.img.x,
-                                                //y : data.img.y,
-                                                // width: data.img.width,
-                                                // height: data.img.height
-                                            }}
+                            <Rnd 
+                                style = {{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    border: "solid 1px #ddd",
+                                    background: "$f0f0f0"
+                                }}
+                                default = {{
+                                    //x : data.img.x,
+                                    //y : data.img.y,
+                                    // width: data.img.width,
+                                    // height: data.img.height
+                                }}
 
-                                            size={{width: this.state.width, height: this.state.height}}
-                                            position={{x: this.state.x, y: this.state.y}}
-                                            onDragStop ={(e,d)=>{this.setState({x: d.x, y: d.y})}}
-                                            onResize={(e,direction, ref, delta, position) =>{
-                                                this.setState({
-                                                    width: ref.style.width,
-                                                    height: ref.style.height
-                                                })    
-                                            }}
-                                            >
-                                            <img src={this.state.url} style ={{width: this.state.width, height: this.state.height}}/>
-                                            {/* <button type="submit" className="btn btn-secondary btn-sm" style = {{position: "absolute", left: 0, bottom: 0}}>
-                                                <div style = {{fontSize: "5pt", color: "yellow"}}>SAVE</div>
-                                            </button>  */}
+                                size={{width: this.state.width, height: this.state.height}}
+                                position={{x: this.state.x, y: this.state.y}}
+                                onDragStop ={(e,d)=>{this.setState({x: d.x, y: d.y})}}
+                                onResize={(e,direction, ref, delta, position) =>{
+                                    this.setState({
+                                        width: ref.style.width,
+                                        height: ref.style.height
+                                    })    
+                                }}
+                                >
+                                <img src={this.state.url} style ={{width: this.state.width, height: this.state.height}}/>
+                                {/* <button type="submit" className="btn btn-secondary btn-sm" style = {{position: "absolute", left: 0, bottom: 0}}>
+                                    <div style = {{fontSize: "5pt", color: "yellow"}}>SAVE</div>
+                                </button>  */}
 
-                                            <Mutation mutation={REMOVE_IMG} key={this.props.imgId}>
-                                                {(removeImg) => (
-                                                    <div>
-                                                        <form
-                                                            onSubmit={e => {
-                                                                e.preventDefault();
-                                                                removeImg({ variables: { id: this.props.imgId } });
-                                                            }}>
-                                                        {/* <button type="submit" className="btn btn-danger">Delete</button> */}
-                                                        <button type="submit" class="btn btn-danger" style={{
-                                                            borderRadius: 1000, 
-                                                            position: "absolute", 
-                                                            display: "flex", 
-                                                            width: "15px", 
-                                                            justifyContent: "center", 
-                                                            alignItems: "center", 
-                                                            height: "15px", 
-                                                            right: 0,
-                                                            top: 0,
-                                                            fontSize: "6pt"}}>X</button>
-                                                        </form>
-                                                    </div>
-                                                )}
-                                            </Mutation>
+                                <Mutation mutation={REMOVE_IMG} key={this.props.imgId}>
+                                    {(removeImg) => (
+                                        <div>
+                                            <form
+                                                onSubmit={e => {
+                                                    e.preventDefault();
+                                                    removeImg({ variables: { id: this.props.imgId } });
+                                                }}>
+                                            {/* <button type="submit" className="btn btn-danger">Delete</button> */}
+                                            <button type="submit" class="btn btn-danger" style={{
+                                                borderRadius: 1000, 
+                                                position: "absolute", 
+                                                display: "flex", 
+                                                width: "15px", 
+                                                justifyContent: "center", 
+                                                alignItems: "center", 
+                                                height: "15px", 
+                                                right: 0,
+                                                top: 0,
+                                                fontSize: "6pt"}}>X</button>
+                                            </form>
+                                        </div>
+                                    )}
+                                </Mutation>
 
-                                        </Rnd>
-                                        
-
-                            //         </div>
-                            //    )}
-                            // </Mutation> 
-                           
+                                <Mutation mutation={UPDATE_IMG} key={this.state.id}>
+                                    {(updateImg) => (
+                                        <form onSubmit={e => {
+                                            console.log("UPDATE IMG")
+                                            e.preventDefault();
+                                            updateImg({ variables: { 
+                                                id: this.props.imgId,
+                                                name: this.state.name,
+                                                url: this.state.url,
+                                                width: parseInt(this.state.width),
+                                                height: parseInt(this.state.height),
+                                                x: parseInt(this.state.x),
+                                                y: parseInt(this.state.y),
+                                                order: parseInt(this.state.order)
+                                            }});
+                                        }}>
+                                            <button type="submit" class="btn btn-primary" style={{
+                                                borderRadius: 1000, 
+                                                position: "absolute", 
+                                                display: "flex", 
+                                                width: "15px", 
+                                                justifyContent: "center", 
+                                                alignItems: "center", 
+                                                height: "15px", 
+                                                left: 0,
+                                                bottom: 0,
+                                                fontSize: "6pt"}}>Save</button>
+                                            
+                                        </form>
+                                    )}
+                                </Mutation>
+                            </Rnd>
                         )
-                        
-                    //}
-
-                    // return(
-                        
-                    //     // <Rnd 
-                    //     //     size={{width: this.state.width, height:this.state.height}}
-                    //     //     position={{x: this.state.x, y: this.state.y}}>
-                    //     //     <img src={data.img.url} style={{position: 'absolute'}}/>
-                    //     // </Rnd>
-
-
-                    // )
                 }}
             </Query>
         )
