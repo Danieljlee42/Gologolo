@@ -42,6 +42,14 @@ const UPDATE_IMG = gql`
         }
 `;
 
+const REMOVE_IMG = gql`
+    mutation removeImg($id: String!){
+        removeImg(id:$id){
+            _id
+        }
+    }
+`;
+
 // DISPLAY THE Img COMPONENT
 class EditImg extends Component {
 
@@ -88,24 +96,24 @@ class EditImg extends Component {
                     
                     //if (this.props.save){
                         return(
-                            <Mutation mutation={UPDATE_IMG} key={this.props.imgId}>
-                               {(updateImg) => (
-                                    <div>
-                                        <form onSubmit={e => {
-                                            e.preventDefault();
-                                            console.log(this.props.imgId+' '+this.state.name+' '+this.state.url+' '+this.state.width+' '+this.state.height+' '+
-                                            this.state.x+' '+this.state.y+' '+this.state.order)
-                                            updateImg({ variables: { 
-                                                id: this.props.imgId,
-                                                name: name,
-                                                url: url,
-                                                width: parseInt(width),
-                                                height: parseInt(height),
-                                                x: parseInt(x),
-                                                y: parseInt(y),
-                                                order: parseInt(order)
-                                            }});
-                                        }}>
+                            // <Mutation mutation={UPDATE_IMG} key={this.props.imgId}>
+                            //    {(updateImg) => (
+                            //         <div>
+                            //             <form onSubmit={e => {
+                            //                 e.preventDefault();
+                            //                 console.log(this.props.imgId+' '+this.state.name+' '+this.state.url+' '+this.state.width+' '+this.state.height+' '+
+                            //                 this.state.x+' '+this.state.y+' '+this.state.order)
+                            //                 updateImg({ variables: { 
+                            //                     id: this.props.imgId,
+                            //                     name: name,
+                            //                     url: url,
+                            //                     width: parseInt(width),
+                            //                     height: parseInt(height),
+                            //                     x: parseInt(x),
+                            //                     y: parseInt(y),
+                            //                     order: parseInt(order)
+                            //                 }});
+                            //             }}>
                                         <Rnd 
                                             style = {{
                                                 display: "flex",
@@ -132,15 +140,41 @@ class EditImg extends Component {
                                             }}
                                             >
                                             <img src={this.state.url} style ={{width: this.state.width, height: this.state.height}}/>
-                                            <button type="submit" className="btn btn-secondary btn-sm" style = {{position: "absolute", left: 0, bottom: 0}}>
+                                            {/* <button type="submit" className="btn btn-secondary btn-sm" style = {{position: "absolute", left: 0, bottom: 0}}>
                                                 <div style = {{fontSize: "5pt", color: "yellow"}}>SAVE</div>
-                                            </button> 
-                                        </Rnd>
-                                        </form>
+                                            </button>  */}
 
-                                    </div>
-                               )}
-                            </Mutation> 
+                                            <Mutation mutation={REMOVE_IMG} key={this.props.imgId}>
+                                                {(removeImg) => (
+                                                    <div>
+                                                        <form
+                                                            onSubmit={e => {
+                                                                e.preventDefault();
+                                                                removeImg({ variables: { id: this.props.imgId } });
+                                                            }}>
+                                                        {/* <button type="submit" className="btn btn-danger">Delete</button> */}
+                                                        <button type="submit" class="btn btn-danger" style={{
+                                                            borderRadius: 1000, 
+                                                            position: "absolute", 
+                                                            display: "flex", 
+                                                            width: "15px", 
+                                                            justifyContent: "center", 
+                                                            alignItems: "center", 
+                                                            height: "15px", 
+                                                            right: 0,
+                                                            top: 0,
+                                                            fontSize: "6pt"}}>X</button>
+                                                        </form>
+                                                    </div>
+                                                )}
+                                            </Mutation>
+
+                                        </Rnd>
+                                        
+
+                            //         </div>
+                            //    )}
+                            // </Mutation> 
                            
                         )
                         

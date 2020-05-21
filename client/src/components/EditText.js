@@ -108,7 +108,18 @@ class EditText extends Component {
                                                 e.preventDefault();
                                                 removeText({ variables: { id: this.props.textId } });
                                             }}>
-                                        <button type="submit" className="btn btn-danger">Delete</button>
+                                        <button type="submit" class="btn btn-danger" style={{
+                                                            borderRadius: 10000, 
+                                                            position: "absolute", 
+                                                            display: "flex", 
+                                                            width: "5px", 
+                                                            justifyContent: "center", 
+                                                            alignItems: "center", 
+                                                            height: "5px", 
+                                                            right: -10,
+                                                            top: -10,
+                                                            fontSize: "5pt"
+                                                            }}>X</button>
                                         </form>
                                     </div>
                                 )}
