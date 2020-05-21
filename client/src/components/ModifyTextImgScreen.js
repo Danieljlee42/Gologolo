@@ -65,9 +65,9 @@ const ADD_IMG = gql`
         $x: Int!,
         $y: Int!,
         $order: Int!,
-        $logoId: String!
+        $logoId: ID!
         ) {
-        addLogo(
+        addImg(
             name: $name,
             url: $url,
             width: $width,
@@ -126,7 +126,7 @@ class ModifyTextImgScreen extends Component {
                                                 <Mutation mutation={ADD_TEXT}>
                                                     {(AddText, { loading, error }) => (
                                                         <form onSubmit={e => {
-                                                            console.log("ADD")
+                                                            console.log("ADDTEXT")
                                                             e.preventDefault();
                                                             
                                                             AddText({ variables: { 
@@ -137,34 +137,44 @@ class ModifyTextImgScreen extends Component {
                                                                 y: parseInt(0), 
                                                                 order: parseInt(0),
                                                                 logoId: this.props.match.params.id
-                                                                // text: text.value, 
-                                                                // color: color.value, 
-                                                                // fontSize: parseInt(fontSize.value), 
-                                                                // x: parseInt(x.value), 
-                                                                // y: parseInt(y.value), 
-                                                                // order: parseInt(order.value),
-                                                                // logoId: logoId.value
                                                             }});
 
-                                                            // text.value = '',
-                                                            // color.value = '',
-                                                            // fontSize.value = '',
-                                                            // x.value = '',
-                                                            // y.value = '',
-                                                            // order.value = '',
-                                                            // logoId.value = ''
                                                         }}>
                                                             <button type="submit" className="btn btn-outline-secondary btn-lg">
                                                                 Add Text
                                                             </button>
                                                         </form> 
                                                     )}
-                                                </Mutation>                                              
+                                                </Mutation>
                                                 
 
-                                                <button type="button" className="btn btn-outline-secondary btn-lg">
-                                                    Add Image
-                                                </button>
+
+                                                <Mutation mutation={ADD_IMG}>
+                                                    {(AddImg, { loading, error }) => (
+                                                        <form onSubmit={e => {
+                                                            console.log("ADDIMG")
+                                                            e.preventDefault();
+                                                            
+                                                            AddImg({ variables: { 
+                                                                name: "SampleImage", 
+                                                                url: "https://lh3.googleusercontent.com/proxy/BavUZr7VWHMg04wP4CM5NbDCsyFuIYxRcKIfE_NPllz_PqeBqmkBAIJxD6DMpvuAagD_K9x_2OdQugHJylQfaF72TgOKlXce6qHs2_KB8er6OA2CxVeV61Cu_JuPNpkpWdny", 
+                                                                width: parseInt(338),
+                                                                height: parseInt(208), 
+                                                                x: parseInt(0), 
+                                                                y: parseInt(0), 
+                                                                order: parseInt(0),
+                                                                logoId: this.props.match.params.id
+                                                            }});
+
+                                                        }}>
+                                                            <button type="submit" className="btn btn-outline-secondary btn-lg">
+                                                                Add Image
+                                                            </button>
+                                                        </form> 
+                                                    )}
+                                                </Mutation>
+
+                                                
 
                                             <Link id="home" to="/">
                                                 <button type="submit" onClick={this.handleSave} className="btn btn-outline-secondary btn-lg">
